@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syed Hasnain Ali — Graphic &amp; Book Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f1ed;
+  --bg-alt:#ffffff;
+  --ink:#111110;
+  --muted:#77746c;
+  --line:#e1ddd3;
+  --accent:#ff4d23;
+  --card:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter Tight',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#fff;}
+a{color:inherit;text-decoration:none;}
+
+/* ---------- Custom cursor ---------- */
+@media(pointer:fine){
+  body{cursor:none;}
+  a,button,.tab,.work-card,.nav-toggle{cursor:none;}
+}
+#cursorDot{
+  position:fixed;top:0;left:0;width:8px;height:8px;border-radius:50%;
+  background:var(--ink);pointer-events:none;z-index:999;
+  transform:translate(-50%,-50%);
+  transition:opacity .2s ease;
+}
+#cursorRing{
+  position:fixed;top:0;left:0;width:38px;height:38px;border-radius:50%;
+  border:1.5px solid var(--ink);pointer-events:none;z-index:998;
+  transform:translate(-50%,-50%);
+  transition:width .25s ease,height .25s ease,background .25s ease,border-color .25s ease,opacity .2s ease;
+  mix-blend-mode:difference;
+}
+#cursorRing.hover{
+  width:64px;height:64px;
+  background:var(--accent);
+  border-color:var(--accent);
+}
+@media(pointer:coarse){
+  #cursorDot,#cursorRing{display:none;}
+}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+
+.disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-0.02em;}
+
+/* ---------- Loader ---------- */
+#loader{
+  position:fixed;inset:0;z-index:999;
+  background:var(--ink);
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:5vw;
+  color:#f2f1ed;
+  transition:transform .9s cubic-bezier(.76,0,.24,1);
+}
+#loader .lg{font-family:'Bricolage Grotesque';font-weight:700;font-size:1.1rem;}
+#loader .pct{font-family:'Bricolage Grotesque';font-weight:700;font-size:1.1rem;}
+#loader.done{transform:translateY(-100%);}
+
+/* ---------- Header ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:26px 5vw;
+  background:rgba(242,241,237,0);
+  border-bottom:1px solid rgba(17,17,16,0);
+  box-shadow:0 10px 30px rgba(17,17,16,0);
+  backdrop-filter:blur(0px);
+  transition:background .35s ease, border-color .35s ease, box-shadow .35s ease, backdrop-filter .35s ease, padding .35s ease;
+}
+header.scrolled{
+  background:rgba(242,241,237,0.85);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 10px 30px rgba(17,17,16,0.06);
+  backdrop-filter:blur(10px);
+  padding:16px 5vw;
+}
+.logo{font-family:'Bricolage Grotesque';font-weight:700;font-size:1.15rem;}
+.logo em{color:var(--accent);font-style:normal;}
+.logo img{display:block;height:62px;width:auto;transition:height .35s ease;}
+header.scrolled .logo img{height:52px;}
+@media(max-width:700px){.logo img{height:46px;}}
+nav{display:flex;gap:2.4rem;align-items:center;}
+nav a{
+  font-size:0.85rem;font-weight:600;
+  position:relative;padding-bottom:2px;
+  cursor:pointer;
+}
+nav a::after{
+  content:"";position:absolute;left:0;bottom:-2px;
+  width:0;height:2px;background:var(--accent);
+  transition:width .3s ease;
+}
+nav a.active::after,nav a:hover::after{width:100%;}
+.nav-toggle{display:none;font-size:0.85rem;font-weight:600;cursor:pointer;}
+/* Nav sits over the dark hero photo on the home page (until scrolled) -> keep it readable in white */
+body.route-home header:not(.scrolled) nav a,
+body.route-home header:not(.scrolled) .nav-toggle{color:#f2f1ed;}
+@media(max-width:760px){
+  nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--ink);flex-direction:column;justify-content:center;align-items:center;gap:2rem;z-index:190;}
+  nav.open{display:flex;}
+  nav a{color:#f2f1ed;font-size:1.4rem;}
+  .nav-toggle{display:block;z-index:201;}
+}
+
+/* ---------- Page system ---------- */
+.page{display:none;}
+.page.active{display:block;animation:pagein .6s cubic-bezier(.16,1,.3,1);}
+@keyframes pagein{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+section{padding:120px 5vw;}
+.inner{max-width:1180px;margin:0 auto;}
+
+/* ---------- Hero ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:140px 5vw 60px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-text{position:relative;z-index:2;max-width:640px;}
+.hero-photo-bg{
+  position:absolute;
+  top:0;right:0;bottom:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  z-index:1;
+}
+/* the hero photo has its own soft fade on the left; multiply makes its white match the page colour */
+.hero-photo-bg img{width:100%;height:100%;object-fit:cover;object-position:right center;display:block;mix-blend-mode:multiply;}
+.hero-photo-bg::after{display:none;}
+@media(max-width:900px){
+  .hero{padding:0 5vw 50px;min-height:auto;}
+  .hero-photo-bg{
+    display:block;
+    top:0;left:0;right:0;bottom:auto;
+    width:100%;height:min(52vh,420px);
+  }
+  .hero-photo-bg::after{
+    background:linear-gradient(180deg,rgba(242,241,237,0) 55%,var(--bg) 100%);
+  }
+  .hero-text{padding-top:calc(min(52vh,420px) + 32px);max-width:100%;}
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:0.82rem;font-weight:600;color:var(--muted);
+  margin-bottom:1.6rem;
+  opacity:0;transform:translateY(14px);
+}
+.hero-eyebrow .dot{width:7px;height:7px;background:var(--accent);border-radius:50%;}
+
+.hero h1{
+  font-size:clamp(3rem,9vw,7.2rem);
+  line-height:0.92;
+  text-transform:uppercase;
+}
+.hero h1 .line{overflow:hidden;display:block;}
+.hero h1 .line span{
+  display:block;
+  transform:translateY(110%);
+  transition:transform .9s cubic-bezier(.16,1,.3,1);
+}
+.hero h1 .line:nth-child(2) span{transition-delay:.08s;}
+.hero h1 .accent{color:var(--accent);}
+
+.hero-sub{
+  margin-top:2rem;
+  max-width:100%;
+  font-size:clamp(0.82rem,1.75vw,1.05rem);
+  color:var(--muted);
+  line-height:1.6;
+  white-space:nowrap;
+  opacity:0;transform:translateY(14px);
+}
+@media(max-width:640px){
+  .hero-sub{white-space:normal;font-size:0.92rem;}
+}
+
+.hero-row{
+  margin-top:3.2rem;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:2rem;
+  opacity:0;transform:translateY(14px);
+}
+
+.hero-stats{display:flex;gap:2.6rem;flex-wrap:wrap;}
+.hero-stats div strong{
+  display:block;font-family:'Bricolage Grotesque';font-weight:700;
+  font-size:1.8rem;
+}
+.hero-stats div span{font-size:0.8rem;color:var(--muted);}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 30px;
+  font-size:0.85rem;font-weight:600;
+  border-radius:100px;
+  transition:transform .3s ease, background .3s ease;
+}
+.btn-solid{background:var(--ink);color:#f2f1ed;}
+.btn-solid:hover{background:var(--accent);transform:translateY(-2px);}
+.btn-outline{border:1.5px solid var(--ink);}
+.btn-outline:hover{background:var(--ink);color:#fff;transform:translateY(-2px);}
+
+.hero.loaded .hero-eyebrow,.hero.loaded .hero-sub,.hero.loaded .hero-row{opacity:1;transform:translateY(0);transition:opacity .8s ease .5s, transform .8s ease .5s;}
+.hero.loaded h1 .line span{transform:translateY(0);}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ---------- Section head ---------- */
+.s-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:2rem;flex-wrap:wrap;margin-bottom:3.5rem;
+}
+.s-kicker{
+  display:flex;align-items:center;gap:8px;
+  font-size:0.8rem;font-weight:600;color:var(--accent);
+  margin-bottom:0.8rem;
+}
+.s-kicker .dot{width:6px;height:6px;background:var(--accent);border-radius:50%;}
+.s-head h2{font-size:clamp(2.1rem,4.5vw,3.4rem);text-transform:uppercase;}
+.s-note{max-width:320px;font-size:0.92rem;color:var(--muted);line-height:1.6;}
+
+/* ---------- About page ---------- */
+.about-grid{display:grid;grid-template-columns:0.9fr 1.3fr;gap:4rem;align-items:start;}
+@media(max-width:800px){.about-grid{grid-template-columns:1fr;}}
+.about-photo{width:100%;border-radius:18px;overflow:hidden;filter:grayscale(100%);box-shadow:0 20px 50px rgba(17,17,16,0.15);}
+.about-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.about-copy p{font-size:1.2rem;line-height:1.75;color:var(--muted);margin-bottom:1.3rem;}
+.about-copy p:first-child{font-size:1.5rem;color:var(--ink);font-weight:500;}
+.big-num{font-family:'Bricolage Grotesque';font-weight:700;font-size:5.5rem;line-height:1;color:var(--line);}
+
+.counter-row{display:flex;justify-content:center;text-align:center;gap:4.5rem;flex-wrap:wrap;margin-top:4rem;padding-top:2.6rem;border-top:1px solid var(--line);}
+.counter-box strong{
+  display:block;font-family:'Bricolage Grotesque';font-weight:700;
+  font-size:4.4rem;line-height:1;
+}
+.counter-box span{font-size:0.95rem;color:var(--muted);}
+
+.skills-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:4rem;}
+@media(max-width:760px){.skills-wrap{grid-template-columns:1fr;}}
+.skills-col{background:var(--bg-alt);padding:2.6rem;}
+.skills-col h4{
+  font-family:'Bricolage Grotesque';
+  font-size:1.6rem;
+  font-weight:700;
+  text-transform:none;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+  margin-bottom:1.8rem;
+  display:flex;align-items:center;gap:12px;
+}
+.skills-col h4::before{content:"";width:28px;height:3px;border-radius:2px;background:var(--accent);}
+
+.chip-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.chip{
+  position:relative;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 20px;
+  border:1.5px solid var(--line);
+  border-radius:100px;
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:0.95rem;
+  background:var(--bg-alt);
+  overflow:hidden;
+  cursor:default;
+  opacity:0;transform:translateY(16px) scale(0.96);
+  transition:transform .5s cubic-bezier(.16,1,.3,1), opacity .5s ease, border-color .3s ease, color .3s ease, box-shadow .3s ease;
+}
+.chip.in{opacity:1;transform:translateY(0) scale(1);}
+.chip::before{
+  content:"";position:absolute;inset:0;
+  background:var(--ink);
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  z-index:0;
+}
+.chip:hover::before{transform:translateY(0);}
+.chip span{position:relative;z-index:1;transition:color .3s ease;}
+.chip .chip-dot{
+  position:relative;z-index:1;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);
+  transition:background .3s ease, transform .3s ease;
+  flex-shrink:0;
+}
+.chip:hover{border-color:var(--ink);box-shadow:0 10px 24px rgba(17,17,16,0.12);transform:translateY(-3px);}
+.chip:hover span{color:#fff;}
+.chip:hover .chip-dot{background:var(--accent);transform:scale(1.6);}
+
+/* ---------- Work hub ---------- */
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+@media(max-width:760px){.work-grid{grid-template-columns:1fr;}}
+.work-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  padding:2.4rem;
+  cursor:pointer;
+  transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease;
+  position:relative;
+  overflow:hidden;
+}
+.work-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(17,17,16,0.1);border-color:var(--ink);}
+.work-card .wc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2.6rem;}
+.work-card .wc-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .35s ease, transform .35s ease;
+}
+.work-card .wc-icon svg{width:24px;height:24px;stroke:var(--ink);transition:stroke .35s ease;}
+.work-card:hover .wc-icon{background:var(--accent);transform:rotate(-8deg) scale(1.05);}
+.work-card:hover .wc-icon svg{stroke:#fff;}
+.work-card .wc-arrow{
+  width:38px;height:38px;border-radius:50%;border:1.5px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .3s ease, transform .3s ease, border-color .3s ease;
+}
+.work-card:hover .wc-arrow{background:var(--accent);border-color:var(--accent);transform:rotate(45deg);}
+.work-card .wc-arrow svg{width:16px;height:16px;stroke:var(--ink);}
+.work-card:hover .wc-arrow svg{stroke:#fff;}
+.work-card h3{font-size:1.7rem;text-transform:uppercase;margin-bottom:0.6rem;transition:transform .3s ease;}
+.work-card:hover h3{transform:translateX(4px);}
+.work-card p{font-size:0.87rem;color:var(--muted);}
+.work-card::before{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.work-card:hover::before{transform:scaleX(1);}
+
+/* ---------- Category page ---------- */
+.cat-header{display:flex;align-items:center;gap:16px;margin-bottom:1rem;}
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:0.82rem;font-weight:600;color:var(--muted);
+  margin-bottom:2rem;cursor:pointer;
+}
+.back-link:hover{color:var(--ink);}
+.tabs{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:3rem;}
+.tab{
+  padding:9px 20px;border:1.5px solid var(--line);border-radius:100px;
+  font-size:0.82rem;font-weight:600;cursor:pointer;
+  transition:all .25s ease;
+}
+.tab.active,.tab:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+.g-card{
+  background:var(--card);border:1px solid var(--line);
+  aspect-ratio:3/4;padding:18px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.g-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(17,17,16,0.08);border-color:var(--accent);}
+.g-card .g-top{min-height:1px;}
+.g-card .g-icon{opacity:0.15;align-self:center;}
+.g-card .g-icon svg{width:34px;height:34px;}
+.g-card .g-title{font-family:'Bricolage Grotesque';font-weight:500;font-size:0.95rem;line-height:1.3;}
+.g-card .g-tag{font-size:0.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:4px;}
+
+/* cards that have an actual cover photo */
+.g-card.has-cover{padding:0;position:relative;overflow:hidden;}
+.g-card.has-cover .g-cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease;}
+.g-card.has-cover:hover .g-cover-img{transform:scale(1.05);}
+.g-card.has-cover .g-cover-info{
+  position:relative;z-index:2;margin-top:auto;padding:14px 16px 16px;
+  background:linear-gradient(180deg,rgba(17,17,16,0) 0%,rgba(17,17,16,0.78) 65%,rgba(17,17,16,0.92) 100%);
+}
+.g-card.has-cover .g-title{color:#f2f1ed;}
+.g-card.has-cover .g-tag{color:rgba(242,241,237,0.75);}
+
+.g-card.has-cover .g-cover-img{background:#7d7d7d;}
+/* logos & product packaging: show the whole image, never crop/zoom it */
+.g-card.has-cover.contain-fit{background:#fff;}
+.g-card.has-cover.contain-fit .g-cover-img{
+  object-fit:contain;object-position:center;
+  background:#fff;padding:8px;box-sizing:border-box;
+}
+.g-card.has-cover.contain-fit:hover .g-cover-img{transform:none;}
+
+/* square logo cards */
+.logo-card{aspect-ratio:1/1;align-items:center;justify-content:center;text-align:center;}
+.logo-card.has-cover{align-items:stretch;text-align:left;}
+.logo-card .g-title{font-size:1.05rem;}
+
+
+/* ---------- Social Media & Printing gallery (keeps each design's own shape) ---------- */
+.sm-grid{column-count:4;column-gap:16px;}
+@media(max-width:1100px){.sm-grid{column-count:3;}}
+@media(max-width:760px){.sm-grid{column-count:2;column-gap:12px;}}
+.sm-card{break-inside:avoid;display:block;margin:0 0 16px;position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);cursor:pointer;transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;}
+@media(max-width:760px){.sm-card{margin-bottom:12px;}}
+.sm-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(17,17,16,0.1);border-color:var(--accent);}
+.sm-card img{display:block;width:100%;height:auto;-webkit-user-select:none;user-select:none;-webkit-user-drag:none;}
+.sm-info{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(180deg,rgba(17,17,16,0) 0%,rgba(17,17,16,0.85) 100%);opacity:0;transform:translateY(6px);transition:opacity .3s ease, transform .3s ease;}
+.sm-card:hover .sm-info{opacity:1;transform:none;}
+@media(hover:none){.sm-info{opacity:1;transform:none;}}
+.sm-info .g-title{color:#f2f1ed;font-family:'Bricolage Grotesque';font-weight:500;font-size:0.9rem;line-height:1.25;}
+.sm-info .g-tag{color:rgba(242,241,237,0.75);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;}
+.lightbox-inner.wide{max-width:94vw;}
+.lightbox-inner.wide .lightbox-img-wrap{display:inline-block;max-height:none;max-width:100%;}
+.lightbox-inner.wide .lightbox-img-wrap img{width:auto;max-width:100%;max-height:76vh;margin:0 auto;}
+
+/* ---------- Lightbox ---------- */
+.g-card{cursor:pointer;}
+.lightbox{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(17,17,16,0.92);
+  display:none;align-items:center;justify-content:center;
+  padding:6vh 5vw;
+  backdrop-filter:blur(6px);
+}
+.lightbox.open{display:flex;}
+.lightbox-close{
+  position:absolute;top:22px;right:28px;
+  font-size:2.2rem;line-height:1;color:#f2f1ed;
+  cursor:pointer;font-weight:300;
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;transition:background .2s ease;
+}
+.lightbox-close:hover{background:rgba(242,241,237,0.12);}
+.lightbox-inner{max-width:520px;width:100%;text-align:center;}
+.lightbox-img-wrap{
+  position:relative;
+  max-height:70vh;
+  border-radius:10px;overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,0.5);
+  margin-bottom:1.4rem;
+  background:rgba(255,255,255,0.03);
+}
+.lightbox-img-wrap img{
+  display:block;width:100%;max-height:70vh;object-fit:contain;
+  -webkit-user-select:none;user-select:none;
+  -webkit-user-drag:none;user-drag:none;
+  -webkit-touch-callout:none;
+  pointer-events:none;
+}
+.lightbox-img-wrap .lightbox-icon{padding:80px 0;opacity:0.25;}
+.lightbox-img-wrap .lightbox-icon svg{width:70px;height:70px;stroke:#f2f1ed;}
+.lightbox-title{font-size:1.5rem;font-weight:600;color:#f2f1ed;}
+.lightbox-tag{font-size:0.8rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:rgba(242,241,237,0.6);margin-top:6px;}
+
+/* social poster cards - animated gradient */
+.poster-card{aspect-ratio:4/5;position:relative;overflow:hidden;border:none;padding:0;}
+.poster-bg{position:absolute;inset:0;background-size:200% 200%;animation:gradientshift 8s ease infinite;}
+@keyframes gradientshift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.poster-shape{position:absolute;border-radius:50%;filter:blur(2px);opacity:0.5;animation:floaty 6s ease-in-out infinite;}
+@keyframes floaty{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-14px) scale(1.08);}}
+.poster-label{position:absolute;bottom:14px;left:14px;color:#fff;font-family:'Bricolage Grotesque';font-weight:700;font-size:0.85rem;text-shadow:0 2px 8px rgba(0,0,0,0.25);}
+.poster-idx{position:absolute;top:14px;right:14px;color:rgba(255,255,255,0.85);font-family:'Bricolage Grotesque';font-weight:700;font-size:0.72rem;}
+
+/* ---------- Contact ---------- */
+.contact-hero{text-align:center;}
+.contact-hero h2{font-size:clamp(2.4rem,7vw,5.5rem);text-transform:uppercase;line-height:0.98;}
+.contact-hero .accent-word{color:var(--accent);}
+.contact-hero p{margin:1.6rem auto 2.6rem;max-width:460px;color:var(--muted);font-size:1rem;}
+.contact-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+
+footer{
+  padding:2.4rem 5vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+  font-size:0.78rem;color:var(--muted);border-top:1px solid var(--line);
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="lg">SYED HASNAIN ALI</div>
+  <div class="pct" id="pct">0%</div>
+</div>
+
+<header>
+  <div class="logo" data-route="home" style="cursor:pointer;"><img src="images/img-922bebc3c9.png" alt="Hasnain — Graphic Designer" draggable="false"></div>
+  <nav id="nav">
+    <a data-route="home">Home</a>
+    <a data-route="about">About</a>
+    <a data-route="work">Work</a>
+    <a data-route="contact">Contact</a>
+  </nav>
+  <div class="nav-toggle" id="navToggle">MENU</div>
+</header>
+
+<div id="cursorRing"></div>
+<div id="cursorDot"></div>
+
+
+<!-- HOME -->
+<main>
+<div class="page" id="page-home">
+  <div class="hero" id="heroEl">
+    <div class="hero-photo-bg"><img src="images/img-b41b2e0667.jpg" alt="Syed Hasnain Ali"></div>
+    <div class="hero-text">
+      <div class="hero-eyebrow"><div class="dot"></div>Portfolio</div>
+      <h1 class="disp">
+        <span class="line"><span>SYED <span class="accent">HASNAIN</span></span></span>
+        <span class="line"><span>ALI</span></span>
+      </h1>
+      <p class="hero-sub">Book Designer | Graphic Designer | Social Media Designer | Print &amp; Branding</p>
+      <div class="hero-row">
+        <a class="btn btn-solid" data-route="work">See My Work</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT (on home page, scroll target) -->
+  <section class="reveal" id="about-home">
+    <div class="inner">
+      <div class="s-kicker"><div class="dot"></div>About Me</div>
+      <div class="about-grid">
+        <div class="about-photo"><img src="images/img-9e492760aa.jpg" alt="Syed Hasnain Ali"></div>
+        <div class="about-copy">
+          <p>I'm a creative Graphic &amp; Book Designer with 5+ years of professional experience in graphic design, book designing, social media posts, branding, and print design.</p>
+          <p>I specialize in creating visually engaging and professional designs that effectively communicate ideas and strengthen brand identity.</p>
+        </div>
+      </div>
+      <div class="counter-row">
+        <div class="counter-box"><strong class="counter" data-target="5" data-suffix="+">0</strong><span>Years Experience</span></div>
+        <div class="counter-box"><strong class="counter" data-target="30" data-suffix="+">0</strong><span>Books Designed</span></div>
+        <div class="counter-box"><strong class="counter" data-target="60" data-suffix="+">0</strong><span>Total Projects</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="inner">
+      <div class="s-head">
+        <div>
+          <div class="s-kicker"><div class="dot"></div>What I Do</div>
+          <h2 class="disp">Selected Work</h2>
+        </div>
+        <p class="s-note" style="text-align:right;">A quick look across books, covers, logos, skincare packaging, and social content.</p>
+      </div>
+      <div class="work-grid">
+        <div class="work-card" data-route="work/books">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5C4 3.7 4.7 3 5.5 3H12v18H5.5c-.8 0-1.5-.7-1.5-1.5v-15Z"/><path d="M20 4.5C20 3.7 19.3 3 18.5 3H12v18h6.5c.8 0 1.5-.7 1.5-1.5v-15Z"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Books</h3><p>Full layout &amp; formatting</p>
+        </div>
+        <div class="work-card" data-route="work/covers">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="1"/><path d="M8 9h8M8 12h8M8 15h5"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Book Covers</h3><p>Cover art &amp; typography</p>
+        </div>
+        <div class="work-card" data-route="work/logos">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Logos</h3><p>Brand marks &amp; identity</p>
+        </div>
+        <div class="work-card" data-route="work/dermatology">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v3.5l1.5 2V21a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1V7.5L9 5.5V2Z"/><path d="M9 9h6"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Skincare Packaging</h3><p>Dermatologist product</p>
+        </div>
+        <div class="work-card" data-route="work/social" style="grid-column:1/-1;">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Social Media &amp; Printing Design</h3><p>Posts, posters, standees &amp; brochures</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <section>
+    <div class="inner">
+      <div class="s-kicker"><div class="dot"></div>About Me</div>
+      <div class="about-grid">
+        <div class="about-photo"><img src="images/img-667f897ac6.jpg" alt="Syed Hasnain Ali"></div>
+        <div class="about-copy">
+          <p>I'm a creative Graphic &amp; Book Designer with 5+ years of professional experience in graphic design, book designing, social media posts, branding, and print design.</p>
+          <p>I specialize in creating visually engaging and professional designs that effectively communicate ideas and strengthen brand identity.</p>
+          <p>I take projects from raw content to print-ready CMYK files, covering everything from children's books and school textbooks to logos and skincare packaging.</p>
+        </div>
+      </div>
+
+      <div class="skills-wrap">
+        <div class="skills-col">
+          <h4>Core Skills</h4>
+          <div class="chip-grid">
+            <div class="chip"><span class="chip-dot"></span><span>Graphic Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Book Design &amp; Layout</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Social Media Post Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Print Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Branding &amp; Visual Identity</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Logo Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Typography</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Page Layout &amp; Composition</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Cover Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Packaging Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Marketing Materials</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Illustration &amp; Vector Design</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Prepress &amp; Print Production</span></div>
+          </div>
+        </div>
+        <div class="skills-col">
+          <h4>Software</h4>
+          <div class="chip-grid">
+            <div class="chip"><span class="chip-dot"></span><span>Adobe InDesign</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Adobe Illustrator</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Adobe Photoshop</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>CorelDRAW</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>Microsoft Office</span></div>
+            <div class="chip"><span class="chip-dot"></span><span>InPage</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- WORK HUB -->
+<div class="page" id="page-work">
+  <section>
+    <div class="inner">
+      <div class="s-head">
+        <div>
+          <div class="s-kicker"><div class="dot"></div>Portfolio</div>
+          <h2 class="disp">My Work</h2>
+        </div>
+        <p class="s-note">Pick a category to explore.</p>
+      </div>
+      <div class="work-grid">
+        <div class="work-card" data-route="work/books">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5C4 3.7 4.7 3 5.5 3H12v18H5.5c-.8 0-1.5-.7-1.5-1.5v-15Z"/><path d="M20 4.5C20 3.7 19.3 3 18.5 3H12v18h6.5c.8 0 1.5-.7 1.5-1.5v-15Z"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Books</h3><p>Full layout &amp; formatting</p>
+        </div>
+        <div class="work-card" data-route="work/covers">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="1"/><path d="M8 9h8M8 12h8M8 15h5"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Book Covers</h3><p>Cover art &amp; typography</p>
+        </div>
+        <div class="work-card" data-route="work/logos">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Logos</h3><p>Brand marks &amp; identity</p>
+        </div>
+        <div class="work-card" data-route="work/dermatology">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v3.5l1.5 2V21a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1V7.5L9 5.5V2Z"/><path d="M9 9h6"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Skincare Packaging</h3><p>Dermatologist product</p>
+        </div>
+        <div class="work-card" data-route="work/social" style="grid-column:1/-1;">
+          <div class="wc-top"><div class="wc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><div class="wc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5M19 5H9M19 5V15"/></svg></div></div>
+          <h3 class="disp">Social Media &amp; Printing Design</h3><p>Posts, posters, standees &amp; brochures</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- BOOKS CATEGORY -->
+<div class="page" id="page-work-books">
+  <section>
+    <div class="inner">
+      <div class="back-link" data-route="work">&larr; Back to Work</div>
+      <div class="s-head">
+        <div><div class="s-kicker"><div class="dot"></div>Work / Books</div><h2 class="disp">Books Designed</h2></div>
+        <p class="s-note">Full book layouts, formatted and prepared for print.</p>
+      </div>
+      <div class="tabs" id="bookTabs">
+        <div class="tab active" data-cat="all">All</div>
+        <div class="tab" data-cat="General">General Books</div>
+        <div class="tab" data-cat="Children">Children's Books</div>
+        <div class="tab" data-cat="School">School Text Books</div>
+        <div class="tab" data-cat="Readers">Readers</div>
+      </div>
+      <div class="grid-cards" id="bookGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- COVERS -->
+<div class="page" id="page-work-covers">
+  <section>
+    <div class="inner">
+      <div class="back-link" data-route="work">&larr; Back to Work</div>
+      <div class="s-head">
+        <div><div class="s-kicker"><div class="dot"></div>Work / Covers</div><h2 class="disp">Book Covers</h2></div>
+        <p class="s-note">Cover designs created for a range of titles. Artwork to be added.</p>
+      </div>
+      <div class="grid-cards" id="coverGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- LOGOS -->
+<div class="page" id="page-work-logos">
+  <section>
+    <div class="inner">
+      <div class="back-link" data-route="work">&larr; Back to Work</div>
+      <div class="s-head">
+        <div><div class="s-kicker"><div class="dot"></div>Work / Logos</div><h2 class="disp">Logo Design</h2></div>
+        <p class="s-note">Brand marks &amp; identity work. Artwork to be added.</p>
+      </div>
+      <div class="grid-cards" id="logoGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- DERMATOLOGY -->
+<div class="page" id="page-work-dermatology">
+  <section>
+    <div class="inner">
+      <div class="back-link" data-route="work">&larr; Back to Work</div>
+      <div class="s-head">
+        <div><div class="s-kicker"><div class="dot"></div>Work / Skincare</div><h2 class="disp">Skincare Packaging</h2></div>
+        <p class="s-note">Dermatologist product line packaging design. Artwork to be added.</p>
+      </div>
+      <div class="grid-cards" id="dermGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- SOCIAL -->
+<div class="page" id="page-work-social">
+  <section>
+    <div class="inner">
+      <div class="back-link" data-route="work">&larr; Back to Work</div>
+      <div class="s-head">
+        <div><div class="s-kicker"><div class="dot"></div>Work / Social</div><h2 class="disp">Social Media &amp; Printing Design</h2></div>
+        <p class="s-note">Social media posts, posters, standees and brochures designed for digital and print.</p>
+      </div>
+      <div class="tabs" id="smTabs"></div>
+      <div class="sm-grid" id="socialGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <section class="contact-hero">
+    <div class="inner">
+      <div class="s-kicker" style="justify-content:center;"><div class="dot"></div>Get In Touch</div>
+      <h2 class="disp">Let's Make<br>Something <span class="accent-word">Great</span></h2>
+      <p>Available for book layout, cover design, branding, packaging, and social content projects.</p>
+      <div class="contact-links">
+        <a class="btn btn-solid" href="mailto:graphicbysyedhasnain@gmail.com">graphicbysyedhasnain@gmail.com</a>
+        <a class="btn btn-outline" href="tel:+923120266422">+92 312 0266422</a>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lightboxClose">&times;</div>
+  <div class="lightbox-inner">
+    <div class="lightbox-img-wrap" id="lightboxImgWrap"></div>
+    <div class="lightbox-title disp" id="lightboxTitle"></div>
+    <div class="lightbox-tag" id="lightboxTag"></div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2026 Syed Hasnain Ali — Book &amp; Graphic Designer</div>
+  <div>Karachi, Pakistan</div>
+</footer>
+
+<script>
+/* ---------- Loader ---------- */
+let p=0;
+const pctEl=document.getElementById('pct');
+const loader=document.getElementById('loader');
+const timer=setInterval(()=>{
+  p+=Math.ceil(Math.random()*14);
+  if(p>=100){p=100;clearInterval(timer);
+    setTimeout(()=>{
+      loader.classList.add('done');
+      document.getElementById('heroEl').classList.add('loaded');
+    },250);
+  }
+  pctEl.textContent=p+'%';
+},90);
+
+/* ---------- Icons ---------- */
+const bookCoverImages={
+"English Tracing Book 1":"images/img-d9d99cd40c.jpg",
+"English Tracing Book 2":"images/img-2428374d6f.jpg",
+"English Tracing Book 3":"images/img-bebcb5ad7a.jpg",
+"Little Learners Literacy English Book 2 — Nursery":"images/img-633a736042.jpg",
+"Little Learners Literacy English Book 1 — Playgroup":"images/img-d3580832e3.jpg",
+"Math Tracing Book 1":"images/img-de403ad0ad.jpg",
+"Math Tracing Book 2":"images/img-3b0bc3404d.jpg",
+"Math Tracing Book 3":"images/img-f9d8d053c4.jpg",
+"Pakistani English Speech":"images/img-c6f65cef7f.jpg",
+"Paramount Happy Reader Level 6 Book 1":"images/img-f7d7ca8992.jpg",
+"Paramount Happy Reader Level 6 Book 2":"images/img-4c4c76152b.jpg",
+"Paramount Happy Reader Level 6 Book 3":"images/img-f2c8a456a4.jpg",
+"Paramount Happy Reader Level 6 Book 4":"images/img-502979708a.jpg",
+"Paramount Happy Reader Level 6 Book 5":"images/img-9be950720e.jpg",
+"Paramount Happy Reader Level 6 Book 6":"images/img-0d257b20a5.jpg",
+"Paramount Holiday Homework 1":"images/img-2c3678344c.jpg",
+"Paramount Holiday Homework 2":"images/img-9f113bad45.jpg",
+"Paramount Holiday Homework 3":"images/img-31eb4155ac.jpg",
+"Paramount Holiday Homework 4":"images/img-a993995660.jpg",
+"Paramount Holiday Homework 5":"images/img-e69f069438.jpg",
+"Studies in Islam Book 1":"images/img-e3fa4894c2.jpg",
+"Studies in Islam Book 2":"images/img-b7bd9cc0c6.jpg",
+"Studies in Islam Book 3":"images/img-955f35149a.jpg",
+"Studies in Islam Book 4":"images/img-4ef2c1f647.jpg",
+"Studies in Islam Book 5":"images/img-68a754982a.jpg",
+"Studies in Islam Book 6":"images/img-b01bfd882e.jpg",
+"Urdu Tracing Book 1":"images/img-7bbbe3330f.jpg",
+"Urdu Tracing Book 2":"images/img-9eec734fee.jpg",
+"Urdu Tracing Book 3":"images/img-9e2690fed9.jpg",
+"Fauji Aik Kahaniyan Be Shumar":"images/img-4c329fc361.jpg",
+"Journey Through Digital Learning Book 2":"images/img-3de47b52a7.jpg",
+"Journey Through Digital Learning Book 3":"images/img-8f28664620.jpg",
+"Journey Through Digital Learning Book 4":"images/img-3cc0e9c3ed.jpg",
+"Journey Through Digital Learning Book 5":"images/img-cc700fe6f3.jpg",
+"Journey Through Digital Learning Book 1":"images/img-ff63abf8f0.jpg",
+"Corporate Success":"images/img-0a4f510051.jpg",
+"Secondary Catalogue 2026":"images/img-a298c300d0.jpg",
+"Pre School and Primary Catalogue 2026":"images/img-690ed5a5a0.jpg"
+};
+
+const logoCoverImages={
+"Busy Birds Books":"images/img-ae3a6e9efa.jpg",
+"My Logo":"images/img-d2e07f8640.jpg",
+"Karachi Book Fair":"images/img-5411cc0a17.jpg",
+"Lahore Book Fair":"images/img-eec226052b.jpg",
+"Mahabi's":"images/img-08bcc8741d.jpg",
+"N Health Care":"images/img-7d72b27687.jpg",
+"Nain Graphics":"images/img-331f9bc9d0.jpg",
+"Syin Care":"images/img-5ff8111daf.jpg",
+};
+
+const dermaCoverImages={
+"NAS Anti Aging Serum":"images/img-e0b774634d.jpg",
+"NBA Acne Soap":"images/img-8828b93b14.jpg",
+"NBG Glowing Soap":"images/img-57d81f5081.jpg",
+"NBM Moisturizing Soap":"images/img-2252b1e680.jpg",
+"NGP Hairfall Spray":"images/img-83a301b5af.jpg",
+"NGS Glowing Serum":"images/img-aa7523fe51.jpg",
+"NGW Glowing Face Wash":"images/img-87d8dbfc42.jpg",
+"NHF Anti Hairfall Shampoo":"images/img-83f028e7b9.jpg",
+"NML Moisturizing Lotion":"images/img-7a585e66be.jpg",
+"NMS Melasma Serum":"images/img-e94df147eb.jpg",
+"NVW Vaginal Wash Sachet":"images/img-2a31c99b5e.jpg",
+"NVW Vaginal Wash":"images/img-660602e634.jpg",
+};
+
+const bookIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4.5C4 3.7 4.7 3 5.5 3H12v18H5.5c-.8 0-1.5-.7-1.5-1.5v-15Z"/><path d="M20 4.5C20 3.7 19.3 3 18.5 3H12v18h6.5c.8 0 1.5-.7 1.5-1.5v-15Z"/></svg>`;
+const coverIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="2.5" width="16" height="19" rx="0.5"/><path d="M4 5.5h16M8 9h8M8 12h8M8 15h5" opacity="0.5"/></svg>`;
+const logoIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" opacity="0.4"/></svg>`;
+const bottleIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 2h6v3.5l1.5 2V21a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1V7.5L9 5.5V2Z"/><path d="M9 9h6" opacity="0.5"/></svg>`;
+
+/* ---------- Data ---------- */
+const books={
+  General:["Pakistani English Speech"],
+  Children:["English Tracing Book 1","English Tracing Book 2","English Tracing Book 3","Math Tracing Book 1","Math Tracing Book 2","Math Tracing Book 3","Urdu Tracing Book 1","Urdu Tracing Book 2","Urdu Tracing Book 3","Paramount Holiday Homework 1","Paramount Holiday Homework 2","Paramount Holiday Homework 3","Paramount Holiday Homework 4","Paramount Holiday Homework 5","Little Learners Literacy English Book 1 — Playgroup","Little Learners Literacy English Book 2 — Nursery"],
+  School:["Islamic Studies","Studies in Islam Book 1","Studies in Islam Book 2","Studies in Islam Book 3","Studies in Islam Book 4","Studies in Islam Book 5","Studies in Islam Book 6"],
+  Readers:["Paramount Happy Readers Level 6 Book 1","Paramount Happy Readers Level 6 Book 2","Paramount Happy Readers Level 6 Book 3","Paramount Happy Readers Level 6 Book 4","Paramount Happy Readers Level 6 Book 5","Paramount Happy Readers Level 6 Book 6","Paramount Happy Readers Level 7 Book 1","Paramount Happy Readers Level 7 Book 2","Paramount Happy Readers Level 7 Book 3","Paramount Happy Readers Level 7 Book 4","Paramount Happy Readers Level 7 Book 5","Paramount Happy Readers Level 7 Book 6"]
+};
+const covers=["English Tracing Book 1","English Tracing Book 2","English Tracing Book 3","Math Tracing Book 1","Math Tracing Book 2","Math Tracing Book 3","Urdu Tracing Book 1","Urdu Tracing Book 2","Urdu Tracing Book 3","Islamic Studies","Studies in Islam Book 1","Studies in Islam Book 2","Studies in Islam Book 3","Studies in Islam Book 4","Studies in Islam Book 5","Studies in Islam Book 6","Studies in Islam Book 7","Studies in Islam Book 8","Paramount Happy Readers Level 6 Book 1","Paramount Happy Readers Level 6 Book 2","Paramount Happy Readers Level 6 Book 3","Paramount Happy Readers Level 6 Book 4","Paramount Happy Readers Level 6 Book 5","Paramount Happy Readers Level 6 Book 6","Paramount Happy Readers Level 7 Book 1","Paramount Happy Readers Level 7 Book 2","Paramount Happy Readers Level 7 Book 3","Paramount Happy Readers Level 7 Book 4","Paramount Happy Readers Level 7 Book 5","Paramount Happy Readers Level 7 Book 6","Little Learners Literacy English Book 1 — Playgroup","Little Learners Literacy English Book 2 — Nursery","Pakistani English Speech","Pre School and Primary Catalogue 2026","Secondary Catalogue 2026","Corporate Success","Fauji Aik Kahaniyan Be Shumar","Journey Through Digital Learning Book 1","Journey Through Digital Learning Book 2","Journey Through Digital Learning Book 3","Journey Through Digital Learning Book 4","Journey Through Digital Learning Book 5"];
+const logos=["My Logo","N Health Care","Syin Care","Mahabi's","Karachi Book Fair","Lahore Book Fair","Nain Graphics","Busy Birds Books"];
+const derma=["NGW Glowing Face Wash","NML Moisturizing Lotion","NHF Anti Hairfall Shampoo","NAS Anti Aging Serum","NMS Melasma Serum","NGS Glowing Serum","NGP Hairfall Spray","NBA Acne Soap","NBG Glowing Soap","NBM Moisturizing Soap","NVW Vaginal Wash","NVW Vaginal Wash Sachet","NAW Acne Face Wash","Anti Aging Cream","Anti Scar Gel","Glowing Cream","Acne Cream","Sun Block Cream","Dark Circle Eye Gel"];
+const socialGradients=[
+  ['#ff4d23','#ffb199'],['#111110','#4b4a46'],['#2e8b8b','#a9e0d8'],['#a53d6e','#f0a8c4'],
+  ['#c99a2e','#ffe08a'],['#3a5cc9','#a9c1f0'],['#ff4d23','#111110'],['#2e8b8b','#111110'],
+  ['#a53d6e','#111110'],['#c99a2e','#111110']
+];
+
+function normTitle(s){return s.toLowerCase().replace(/readers/g,'reader').replace(/[—–]/g,'-').replace(/--/g,'-').replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();}
+const coverImageLookup={};
+Object.keys(bookCoverImages).forEach(k=>{coverImageLookup[normTitle(k)]=bookCoverImages[k];});
+function getCoverImg(t){return coverImageLookup[normTitle(t)]||null;}
+
+function bookCard(t,i,cat){
+  const img=getCoverImg(t);
+  if(img){
+    return `<div class="g-card has-cover" data-cat="${cat}"><img class="g-cover-img" src="${img}" alt="${t} cover" loading="lazy" draggable="false" oncontextmenu="return false"><div class="g-cover-info"><div class="g-title disp">${t}</div><div class="g-tag">${cat}</div></div></div>`;
+  }
+  return `<div class="g-card" data-cat="${cat}"><div class="g-top"></div><div class="g-icon">${bookIcon}</div><div><div class="g-title disp">${t}</div><div class="g-tag">${cat}</div></div></div>`;
+}
+function coverCard(t,i){
+  const img=getCoverImg(t);
+  if(img){
+    return `<div class="g-card has-cover"><img class="g-cover-img" src="${img}" alt="${t} cover" loading="lazy" draggable="false" oncontextmenu="return false"><div class="g-cover-info"><div class="g-title disp">${t}</div><div class="g-tag">Cover</div></div></div>`;
+  }
+  return `<div class="g-card"><div class="g-top"></div><div class="g-icon">${coverIcon}</div><div><div class="g-title disp">${t}</div><div class="g-tag">Cover</div></div></div>`;
+}
+const logoImageLookup={};
+Object.keys(logoCoverImages).forEach(k=>{logoImageLookup[normTitle(k)]=logoCoverImages[k];});
+function getLogoImg(t){return logoImageLookup[normTitle(t)]||null;}
+
+const dermaImageLookup={};
+Object.keys(dermaCoverImages).forEach(k=>{dermaImageLookup[normTitle(k)]=dermaCoverImages[k];});
+function getDermaImg(t){return dermaImageLookup[normTitle(t)]||null;}
+
+function logoCard(t,i){
+  const img=getLogoImg(t);
+  if(img){
+    return `<div class="g-card logo-card has-cover contain-fit"><img class="g-cover-img" src="${img}" alt="${t} logo" loading="lazy" draggable="false" oncontextmenu="return false"><div class="g-cover-info"><div class="g-title disp">${t}</div><div class="g-tag">Logo</div></div></div>`;
+  }
+  return `<div class="g-card logo-card"><div class="g-icon">${logoIcon}</div><div><div class="g-title disp">${t}</div><div class="g-tag">Logo</div></div></div>`;
+}
+function dermCard(t,i){
+  const img=getDermaImg(t);
+  if(img){
+    return `<div class="g-card has-cover contain-fit"><img class="g-cover-img" src="${img}" alt="${t} packaging" loading="lazy" draggable="false" oncontextmenu="return false"><div class="g-cover-info"><div class="g-title disp">${t}</div><div class="g-tag">Packaging</div></div></div>`;
+  }
+  return `<div class="g-card"><div class="g-top"></div><div class="g-icon">${bottleIcon}</div><div><div class="g-title disp">${t}</div><div class="g-tag">Packaging</div></div></div>`;
+}
+function posterCard(i){
+  const g=socialGradients[i%socialGradients.length];
+  return `<div class="g-card poster-card">
+    <div class="poster-bg" style="background:linear-gradient(135deg,${g[0]},${g[1]});"></div>
+    <div class="poster-shape" style="width:70px;height:70px;background:${g[1]};top:20%;left:15%;"></div>
+    <div class="poster-shape" style="width:40px;height:40px;background:#fff;bottom:30%;right:15%;animation-delay:1s;"></div>
+    <div class="poster-idx">${String(i+1).padStart(2,'0')}</div>
+    <div class="poster-label">Social Post</div>
+  </div>`;
+}
+
+/* Render Books */
+function renderBooks(filter){
+  const grid=document.getElementById('bookGrid');
+  let html='';
+  let i=0;
+  Object.keys(books).forEach(cat=>{
+    if(filter==='all'||filter===cat){
+      books[cat].forEach(t=>{html+=bookCard(t,i,cat);i++;});
+    }
+  });
+  grid.innerHTML=html;
+}
+document.getElementById('bookTabs').addEventListener('click',e=>{
+  if(!e.target.classList.contains('tab'))return;
+  document.querySelectorAll('#bookTabs .tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  renderBooks(e.target.dataset.cat);
+});
+renderBooks('all');
+
+document.getElementById('coverGrid').innerHTML=covers.map((t,i)=>coverCard(t,i)).join('');
+document.getElementById('logoGrid').innerHTML=logos.map((t,i)=>logoCard(t,i)).join('');
+document.getElementById('dermGrid').innerHTML=derma.map((t,i)=>dermCard(t,i)).join('');
+const smItems=[{"t": "14 August Post (Landscape)", "c": "Social Media Posts", "w": 1400, "h": 838, "s": "images/img-2b95b12b0e.jpg"}, {"t": "14 August Post", "c": "Social Media Posts", "w": 874, "h": 1400, "s": "images/img-33c8b7d932.jpg"}, {"t": "Eid Ul Adha Post Design", "c": "Social Media Posts", "w": 1050, "h": 1400, "s": "images/img-1d18b7c166.jpg"}, {"t": "Eid Ul Adha Post", "c": "Social Media Posts", "w": 1400, "h": 1400, "s": "images/img-558ed8f5b8.jpg"}, {"t": "Schools of the Oppressed", "c": "Social Media Posts", "w": 1400, "h": 990, "s": "images/img-a7c27bf6ce.jpg"}, {"t": "Follow Us Post", "c": "Social Media Posts", "w": 1169, "h": 1400, "s": "images/img-8f1efd5f0b.jpg"}, {"t": "Coming Soon Teaser", "c": "Social Media Posts", "w": 1120, "h": 1400, "s": "images/img-fef87dab83.jpg"}, {"t": "The Hound of the Baskervilles", "c": "Social Media Posts", "w": 1400, "h": 990, "s": "images/img-c9a9aaa8de.jpg"}, {"t": "The Wonderful Wizard of Oz", "c": "Social Media Posts", "w": 1400, "h": 990, "s": "images/img-1b373c3f6f.jpg"}, {"t": "World Book Fair Post", "c": "Social Media Posts", "w": 1400, "h": 1400, "s": "images/img-01486f268d.jpg"}, {"t": "Book Price List", "c": "Posters", "w": 900, "h": 1278, "s": "images/img-12643cdff0.jpg"}, {"t": "School Textbooks & Medical Books", "c": "Posters", "w": 900, "h": 900, "s": "images/img-6ce030842f.jpg"}, {"t": "Absorbing World Geography & English", "c": "Posters", "w": 1200, "h": 1200, "s": "images/img-4e3175a420.jpg"}, {"t": "Soul Unshackled", "c": "Posters", "w": 900, "h": 1273, "s": "images/img-b52bbaa613.jpg"}, {"t": "Digital Education Programs", "c": "Posters", "w": 1400, "h": 581, "s": "images/img-6669ecac57.jpg"}, {"t": "Book Prices Poster", "c": "Posters", "w": 1050, "h": 1400, "s": "images/img-bc95c8f8a9.jpg"}, {"t": "Journey Through Series", "c": "Posters", "w": 1400, "h": 623, "s": "images/img-f0a44dd28a.jpg"}, {"t": "35th Annual Book Fair", "c": "Posters", "w": 900, "h": 1365, "s": "images/img-2a926ba202.jpg"}, {"t": "O Lord! Increase Me in My Knowledge", "c": "Posters", "w": 1200, "h": 787, "s": "images/img-2a88483a42.jpg"}, {"t": "Collected Works of Sirajuddin Aziz", "c": "Posters", "w": 1200, "h": 827, "s": "images/img-c0fac1add9.jpg"}, {"t": "18 Sep Mehfil", "c": "Islamic Posters", "w": 854, "h": 1400, "s": "images/img-ebff476359.jpg"}, {"t": "20 Sep Mehfil", "c": "Islamic Posters", "w": 1028, "h": 1400, "s": "images/img-1285fbcd71.jpg"}, {"t": "22 Aug Mehfil", "c": "Islamic Posters", "w": 933, "h": 1400, "s": "images/img-0d3ed20697.jpg"}, {"t": "26 Aug Mehfil", "c": "Islamic Posters", "w": 953, "h": 1400, "s": "images/img-4fbb088251.jpg"}, {"t": "Asif Attari Poster", "c": "Islamic Posters", "w": 933, "h": 1400, "s": "images/img-c80bd7fc2a.jpg"}, {"t": "My Birthday Poster", "c": "Islamic Posters", "w": 1080, "h": 1080, "s": "images/img-84a2d88311.jpg"}, {"t": "8 Aug Mehfil", "c": "Islamic Posters", "w": 1057, "h": 1400, "s": "images/img-389a83b4b3.jpg"}, {"t": "ELT Skills Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-9fe106ef29.jpg"}, {"t": "Early Childhood Education Standee", "c": "Standees", "w": 559, "h": 1400, "s": "images/img-a71f271ca8.jpg"}, {"t": "Hello Code Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-a469fc3e2f.jpg"}, {"t": "Computing Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-a1858317b2.jpg"}, {"t": "Journey Through Maths Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-a75261b449.jpg"}, {"t": "Koobits Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-0b8ac61fb8.jpg"}, {"t": "Literacy Pro Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-2f86c3069e.jpg"}, {"t": "Phonics Qaida Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-900c4f8679.jpg"}, {"t": "Maths Connection Standee", "c": "Standees", "w": 560, "h": 1400, "s": "images/img-5975c24531.jpg"}, {"t": "ELT Skills Brochure", "c": "Brochures", "w": 1400, "h": 1400, "s": "images/img-2e4954a45b.jpg"}, {"t": "Hello Code Brochure", "c": "Brochures", "w": 1400, "h": 1400, "s": "images/img-39b4cbc1db.jpg"}, {"t": "Koobit Brochure", "c": "Brochures", "w": 1400, "h": 1400, "s": "images/img-09f66a93fb.jpg"}, {"t": "O Level Islamiat Brochure", "c": "Brochures", "w": 990, "h": 1400, "s": "images/img-e7307e8b7d.jpg"}, {"t": "Scholastic Literacy Pro Brochure", "c": "Brochures", "w": 1400, "h": 1400, "s": "images/img-907dd5c42a.jpg"}];
+
+const smCats=["All","Social Media Posts","Posters","Islamic Posters","Standees","Brochures"];
+document.getElementById('smTabs').innerHTML=smCats.map((c,i)=>`<div class="tab${i?'':' active'}" data-cat="${c}">${c}</div>`).join('');
+function renderSocial(filter){
+  document.getElementById('socialGrid').innerHTML=smItems.filter(x=>filter==='All'||x.c===filter).map(x=>
+    `<div class="sm-card" data-t="${x.t.replace(/"/g,'&quot;')}" data-c="${x.c}"><img src="${x.s}" width="${x.w}" height="${x.h}" alt="${x.t.replace(/"/g,'&quot;')}" loading="lazy" draggable="false" oncontextmenu="return false"><div class="sm-info"><div class="g-title">${x.t}</div><div class="g-tag">${x.c}</div></div></div>`).join('');
+}
+renderSocial('All');
+document.getElementById('smTabs').addEventListener('click',e=>{
+  if(!e.target.classList.contains('tab'))return;
+  document.querySelectorAll('#smTabs .tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  renderSocial(e.target.dataset.cat);
+});
+
+
+/* ---------- Lightbox (Books / Covers) ---------- */
+const lightbox=document.getElementById('lightbox');
+const lightboxImgWrap=document.getElementById('lightboxImgWrap');
+const lightboxTitle=document.getElementById('lightboxTitle');
+const lightboxTag=document.getElementById('lightboxTag');
+
+function openLightbox(card){
+  const title=card.querySelector('.g-title')?.textContent.trim()||'';
+  const tag=card.querySelector('.g-tag')?.textContent.trim()||'';
+  const imgEl=card.querySelector('.g-cover-img');
+  if(imgEl){
+    lightboxImgWrap.innerHTML=`<img src="${imgEl.getAttribute('src')}" alt="${title}" draggable="false" oncontextmenu="return false">`;
+  }else{
+    const existingIcon=card.querySelector('.g-icon');
+    lightboxImgWrap.innerHTML=`<div class="lightbox-icon">${existingIcon?existingIcon.innerHTML:bookIcon}</div>`;
+  }
+  lightboxTitle.textContent=title;
+  lightboxTag.textContent=tag;
+  lightbox.classList.add('open');
+}
+function closeLightbox(){
+  lightbox.classList.remove('open');
+  document.querySelector('.lightbox-inner').classList.remove('wide');
+  lightboxImgWrap.innerHTML='';
+}
+['bookGrid','coverGrid','logoGrid','dermGrid'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{
+    const card=e.target.closest('.g-card');
+    if(!card)return;
+    openLightbox(card);
+  });
+});
+document.getElementById('socialGrid').addEventListener('click',e=>{
+  const card=e.target.closest('.sm-card');if(!card)return;
+  const img=card.querySelector('img');
+  document.querySelector('.lightbox-inner').classList.add('wide');
+  lightboxImgWrap.innerHTML=`<img src="${img.getAttribute('src')}" alt="${card.dataset.t}" draggable="false" oncontextmenu="return false">`;
+  lightboxTitle.textContent=card.dataset.t;lightboxTag.textContent=card.dataset.c;
+  lightbox.classList.add('open');
+});
+document.getElementById('lightboxClose').addEventListener('click',closeLightbox);
+lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+lightbox.addEventListener('contextmenu',e=>e.preventDefault());
+
+/* ---------- Router ---------- */
+const pages={
+  'home':'page-home','about':'page-about','work':'page-work','contact':'page-contact',
+  'work/books':'page-work-books','work/covers':'page-work-covers','work/logos':'page-work-logos',
+  'work/dermatology':'page-work-dermatology','work/social':'page-work-social'
+};
+function navigate(route){
+  if(!pages[route])route='home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(pages[route]).classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  const top=route.split('/')[0];
+  document.querySelectorAll(`nav a[data-route="${top}"]`).forEach(a=>a.classList.add('active'));
+  document.body.classList.toggle('route-home', top==='home');
+  window.scrollTo({top:0,behavior:'instant'});
+  history.replaceState(null,'',location.pathname+'#'+route);
+  document.getElementById('nav').classList.remove('open');
+  initReveal();
+}
+document.body.addEventListener('click',e=>{
+  const el=e.target.closest('[data-route]');
+  if(el){e.preventDefault();navigate(el.dataset.route);}
+});
+document.getElementById('navToggle').addEventListener('click',()=>{
+  document.getElementById('nav').classList.toggle('open');
+});
+navigate(location.hash?location.hash.slice(1):'home');
+
+/* ---------- Scroll reveal ---------- */
+function initReveal(){
+  const els=document.querySelectorAll('.page.active .reveal, .page.active .s-head, .page.active .work-grid, .page.active .grid-cards, .page.active .about-grid, .page.active .skills-wrap');
+  els.forEach(el=>el.classList.add('reveal'));
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');}});
+  },{threshold:0.1});
+  els.forEach(el=>io.observe(el));
+
+  const chips=document.querySelectorAll('.page.active .chip');
+  const chipIO=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        const i=Array.from(chips).indexOf(en.target);
+        en.target.style.transitionDelay=(i%13)*35+'ms';
+        en.target.classList.add('in');
+      }
+    });
+  },{threshold:0.15});
+  chips.forEach(c=>chipIO.observe(c));
+}
+initReveal();
+
+/* ---------- Custom cursor ---------- */
+(function(){
+  if(window.matchMedia('(pointer:fine)').matches){
+    const dot=document.getElementById('cursorDot');
+    const ring=document.getElementById('cursorRing');
+    let rx=0,ry=0,mx=0,my=0;
+    window.addEventListener('mousemove',e=>{
+      mx=e.clientX;my=e.clientY;
+      dot.style.left=mx+'px';dot.style.top=my+'px';
+    });
+    function loop(){
+      rx+=(mx-rx)*0.16;
+      ry+=(my-ry)*0.16;
+      ring.style.left=rx+'px';ring.style.top=ry+'px';
+      requestAnimationFrame(loop);
+    }
+    loop();
+    document.addEventListener('mouseover',e=>{
+      if(e.target.closest('a,button,.tab,.work-card,.nav-toggle')){ring.classList.add('hover');}
+    });
+    document.addEventListener('mouseout',e=>{
+      if(e.target.closest('a,button,.tab,.work-card,.nav-toggle')){ring.classList.remove('hover');}
+    });
+  }
+})();
+
+/* ---------- Header scroll shadow ---------- */
+const headerEl=document.querySelector('header');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY>40){headerEl.classList.add('scrolled');}
+  else{headerEl.classList.remove('scrolled');}
+});
+
+/* ---------- Animated counters ---------- */
+function animateCounter(el){
+  const target=parseInt(el.dataset.target,10);
+  const suffix=el.dataset.suffix||'';
+  const dur=1400;
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-t,3);
+    el.textContent=Math.round(eased*target)+suffix;
+    if(t<1)requestAnimationFrame(tick);
+    else el.textContent=target+suffix;
+  }
+  requestAnimationFrame(tick);
+}
+const counterIO=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting && !en.target.dataset.done){
+      en.target.dataset.done='1';
+      animateCounter(en.target);
+    }
+  });
+},{threshold:0.4});
+document.querySelectorAll('.counter').forEach(c=>counterIO.observe(c));
+</script>
+
+</body>
+</html>
